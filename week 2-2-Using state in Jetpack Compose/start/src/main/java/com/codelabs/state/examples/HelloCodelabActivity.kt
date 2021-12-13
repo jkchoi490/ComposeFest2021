@@ -45,11 +45,7 @@ class HelloCodelabActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityHelloCodelabBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        // doAfterTextChange is an event that modifies state
-        binding.textInput.doAfterTextChanged { text ->
+        binding.textInput.doAfterTextChanged {text ->
             name = text.toString()
             updateHello()
         }
@@ -84,19 +80,17 @@ class HelloViewModel : ViewModel() {
  * An example showing unidirectional data flow in the View system using a ViewModel.
  */
 class HelloCodeLabActivityWithViewModel : AppCompatActivity() {
-    private val helloViewModel by viewModels<HelloViewModel>()
+    private val helloViewModel by viewModels<HelloCodelabViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityHelloCodelabBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // doAfterTextChange is an event that triggers an event on the ViewModel
         binding.textInput.doAfterTextChanged {
-            // onNameChanged is an event on the ViewModel
             helloViewModel.onNameChanged(it.toString())
         }
-        // [helloViewModel.name] is state that we observe to update the UI
+
         helloViewModel.name.observe(this) { name ->
             binding.helloText.text = "Hello, $name"
         }
@@ -146,5 +140,18 @@ private fun HelloInput(
             onValueChange = onNameChange,
             label = { Text("Name") }
         )
+    }
+}
+class HelloCodelabViewModel: ViewModel() {
+
+    // LiveData holds state which is observed by the UI
+    // (state flows down from ViewModel)
+    private val _name = MutableLiveData("")
+    val name: LiveData<String> = _name
+
+    // onNameChanged is an event we're defining that the UI can invoke
+    // (events flow up from UI)
+    fun onNameChanged(newName: String) {
+        _name.value = newName
     }
 }
