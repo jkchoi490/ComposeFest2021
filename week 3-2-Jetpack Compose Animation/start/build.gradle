@@ -41,6 +41,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
     }
+    task wrapper(type: Wrapper) {
+        gradleVersion = '7.0'
+    }
 }
 
 dependencies {
