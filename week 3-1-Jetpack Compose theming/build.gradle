@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+
 buildscript {
     ext {
         compose_version = '1.0.4'
@@ -23,6 +24,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:7.0.3"
